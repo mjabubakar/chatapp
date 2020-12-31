@@ -1,7 +1,7 @@
 <script context="module">
     import Socket from "socket.io-client";
 
-    import Container from "../components/index.svelte";
+    import Container from "./_components/index.svelte";
     const token = localStorage.getItem("socketToken");
     export const socket = Socket("http://localhost:3001/", {
         query: { token },

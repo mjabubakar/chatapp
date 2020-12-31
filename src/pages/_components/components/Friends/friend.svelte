@@ -42,12 +42,14 @@
         margin-top: 0.2em;
         overflow: hidden;
         line-height: 1.2em;
+        max-width: 100%;
+        word-break: break-all;
     }
 
     .details,
     .side {
-        margin-top: 0.2em;
-        height: 45px;
+        /* margin-top: 0.2em; */
+        height: 90%;
     }
 
     .friend .name {
@@ -74,7 +76,7 @@
     .side {
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
+        margin-bottom: 1em;
     }
 </style>
 
@@ -90,7 +92,7 @@
         <div class="details">
             <div class="name">{friend.username}</div>
 
-            <div class:bold={friend.seen === false} class="lastmessage">
+            <div class:bold={!friend.seen} class="lastmessage">
                 {friend.lastmessage}
             </div>
         </div>

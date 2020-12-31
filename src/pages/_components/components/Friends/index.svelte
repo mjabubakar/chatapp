@@ -1,5 +1,4 @@
 <script>
-	import SearchBar from "../SearchBar.svelte";
 	import Friend from "./friend.svelte";
 	import { onMount } from "svelte";
 	import {
@@ -13,6 +12,7 @@
 	} from "../../actions/store";
 	import { socket } from "../../pages/index.svelte";
 	import fetcher from "../../actions/axios";
+	import SearchBar from "../SearchBar.svelte";
 	export let res;
 	let friends = res.friends;
 
@@ -45,7 +45,7 @@
 						profilepic,
 						username: sentBy,
 						lastmessage: message,
-						seen: true,
+						seen: $userName === sentBy,
 					},
 					...friends,
 				];
@@ -151,7 +151,7 @@
 	.bio {
 		font-size: 0.75em;
 		max-width: 80%;
-		word-break: break-word;
+		word-break: break-all;
 	}
 
 	.find {
@@ -199,7 +199,7 @@
 					{friend} />
 			{/if}
 		{:else}
-			<div on:click={Display} class="find">Find new friends</div>
+			<div />
 		{/each}
 	</div>
 </div>

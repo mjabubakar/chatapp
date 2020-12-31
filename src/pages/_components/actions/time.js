@@ -39,7 +39,7 @@ export const hoursAgo = (str) => {
   if (date >= yesterday) {
     if (today.getTime() - date.getTime() < 1000 * 60 * 60) {
       const mins = today.getMinutes() - date.getMinutes();
-      if (mins < 2) return "Just now";
+      if (mins < 2) return "1m ago";
       return mins + "m ago";
     }
     if (date.getDate() === today.getDate()) {
@@ -57,11 +57,12 @@ export const time = (d) => {
   const hours = date.getHours();
   const minutes = date.getMinutes();
   const time =
-    check(hours % 12) + ":" + check(minutes) + `${hours > 12 ? " PM" : " AM"}`;
+    check(hours % 12) + ":" + check(minutes) + `${hours >= 12 ? " PM" : " AM"}`;
   return time;
 };
 
 const check = (val) => {
+  if (val === 0) return "12";
   if (val < 10) return `0${val}`;
   return val;
 };

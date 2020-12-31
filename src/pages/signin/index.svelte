@@ -2,10 +2,9 @@
     import { metatags, redirect, url } from "@roxi/routify";
 
     import { onMount } from "svelte";
+    import fetcher from "../_components/actions/axios";
 
-    import fetcher from "../../actions/axios.js";
-    import { emailVal } from "../../actions/validation.js";
-
+    fetcher;
     metatags.title = "Sign In";
 
     let token;
@@ -22,7 +21,6 @@
 
     const onsubmit = async () => {
         errorMessage = "";
-        if (!emailVal(email)) return (errorMessage = "Email address invalid.");
         if (password.length < 6) return (errorMessage = "Password too short.");
         try {
             const res = await fetcher.post("/login", {
@@ -104,7 +102,11 @@
         {#if errorMessage}
             <div class="error">{errorMessage}</div>
         {/if}
-        <input type="email" placeholder="Email" required bind:value={email} />
+        <input
+            type="email"
+            placeholder="Email or Username"
+            required
+            bind:value={email} />
         <input
             type="password"
             bind:value={password}

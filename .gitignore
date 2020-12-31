@@ -8,3 +8,6 @@ src/tmp/
 assets/build
 .vercel
 todo
+.firebase
+.firebaserc
+firebase.json

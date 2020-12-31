@@ -3,9 +3,9 @@
 	import { onMount } from "svelte";
 	import fetcher from "../actions/axios";
 	import { myUsername, userName } from "../actions/store";
-	import Details from "./Details/index.svelte";
-	import Friends from "./Friends/index.svelte";
-	import Messages from "./Messages/index.svelte";
+	import Details from "./components/Details/index.svelte";
+	import Friends from "./components/Friends/index.svelte";
+	import Messages from "./components/Messages/index.svelte";
 
 	metatags.title = "Chat App";
 	metatags.description = "Chat app built with Svelte";

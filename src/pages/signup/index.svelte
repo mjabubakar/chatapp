@@ -2,8 +2,8 @@
     import { goto, metatags, redirect, url } from "@roxi/routify";
 
     import { onMount } from "svelte";
-    import fetcher from "../../actions/axios";
-    import validation from "../../actions/validation";
+    import fetcher from "../_components/actions/axios";
+    import validation from "../_components/actions/validation";
 
     metatags.title = "Sign Up";
     let email;

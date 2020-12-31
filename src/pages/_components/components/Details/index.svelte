@@ -1,5 +1,5 @@
 <script>
-	import SearchBar from "../SearchBar.svelte";
+	import SearchBar from "../../components/SearchBar.svelte";
 	import {
 		chatId,
 		display,
@@ -8,10 +8,10 @@
 		searchUser,
 		userName,
 	} from "../../actions/store";
-	import fetcher from "../../actions/axios";
-	import Friend from "../Friends/friend.svelte";
-	import { socket } from "../../pages/index.svelte";
+	import Friend from "../../components/Friends/friend.svelte";
+	import { socket } from "../../index.svelte";
 	import { redirect } from "@roxi/routify";
+	import fetcher from "../../actions/axios";
 	export let users;
 	const back = () => {
 		if (!$userName) return display.update(() => "one");
@@ -51,7 +51,7 @@
 	}
 
 	.users {
-		height: calc(100% - 80px);
+		height: calc(100% - 100px);
 		overflow-y: auto;
 	}
 
@@ -103,7 +103,13 @@
 
 <div class:display={$display !== 'three'} class="details-container">
 	<div class="top">
-		<div class="back" on:click={back}>Back</div>
+		<div class="back" on:click={back}>
+			<svg style="width:24px;height:24px" viewBox="0 0 24 24">
+				<path
+					fill="currentColor"
+					d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+			</svg>
+		</div>
 		<div on:click={logout} class="logout">Logout</div>
 	</div>
 	<SearchBar type="user" />

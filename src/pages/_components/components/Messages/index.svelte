@@ -1,7 +1,6 @@
 <script>
 	import { afterUpdate, beforeUpdate, onMount } from "svelte";
 	import { socket } from "../../pages/index.svelte";
-	import fetcher from "../../actions/axios.js";
 	import {
 		chatId,
 		currentMessage,
@@ -13,6 +12,7 @@
 	} from "../../actions/store.js";
 	import { getTime, hoursAgo, time } from "../../actions/time";
 	import Typing from "./typing.svelte";
+	import fetcher from "../../actions/axios";
 	const back = () => {
 		display.update(() => "one");
 	};
@@ -27,13 +27,17 @@
 		const msg = message;
 		messages = [
 			...messages,
-			{ message, sentBy: $myUsername, time: new Date() },
+			{ message, sentBy: $myUsername, time: new Date(), sent: false },
 		];
 		currentMessage.update(() => msg);
 		message = "";
-		await fetcher.post(`/sendmessage/${$userName}`, {
-			message: msg,
-		});
+		try {
+			await fetcher.post(`/sendmessage/${$userName}`, {
+				message: msg,
+			});
+			messages[messages.length - 1].sent = true;
+		} catch (e) {}
+
 		socket.emit("sendmessage", {
 			username: $userName,
 			message: msg,
@@ -128,6 +132,8 @@
 		loading = getMessages();
 		fetcher.post(`/seen/${$userName}`);
 	}
+
+	let height = {};
 </script>
 
 <style>
@@ -147,7 +153,6 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		width: 90%;
 		height: 40px;
 		margin-top: 0.5em;
 	}
@@ -218,8 +223,21 @@
 		width: 100%;
 		display: flex;
 		justify-content: flex-end;
+		align-items: center;
 		flex-direction: row;
 		align-items: flex-end;
+	}
+
+	.messages .to,
+	.messages .from {
+		word-break: break-all;
+	}
+
+	.to .sent {
+		color: #0057ff;
+		display: flex;
+		align-items: center;
+		margin-bottom: 1%;
 	}
 
 	.messages .from {
@@ -330,7 +348,13 @@
 <div class:display={$display !== 'two'} class="messages-container">
 	<div class="container">
 		<div class="profile">
-			<div class="back" on:click={back}>Back</div>
+			<div class="back" on:click={back}>
+				<svg style="width:24px;height:24px" viewBox="0 0 24 24">
+					<path
+						fill="currentColor"
+						d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+				</svg>
+			</div>
 			<div class="profilepic">
 				<img src={$profilePic} alt={$userName} />
 			</div>
@@ -340,12 +364,18 @@
 				{#if !$online}
 					<div />
 				{:else if $online !== 'Online'}
-					<div class="online">Active {hoursAgo($online)} ago</div>
+					<div class="online">Active {hoursAgo($online)}</div>
 				{:else}
-					<div class="online">Active</div>
+					<div class="online">Active now</div>
 				{/if}
 			</div>
-			<div on:click={next} class="next">Next</div>
+			<div on:click={next} class="next">
+				<svg style="width:24px;height:24px" viewBox="0 0 24 24">
+					<path
+						fill="currentColor"
+						d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
+				</svg>
+			</div>
 		</div>
 
 		<hr />
@@ -379,11 +409,26 @@
 								</div>
 							{:else}
 								<div class="to">
-									<div class="message-container">
+									<div
+										bind:clientHeight={height[i]}
+										class="message-container">
 										<div class="message">
 											{message.message}
 										</div>
 									</div>
+									{#if message.sent === false}
+										<div
+											class="sent"
+											style="height: {height[i]}px">
+											<svg
+												style="width:18px;height:18px"
+												viewBox="0 0 24 24">
+												<path
+													fill="currentColor"
+													d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
+											</svg>
+										</div>
+									{/if}
 								</div>
 							{/if}
 						</div>
